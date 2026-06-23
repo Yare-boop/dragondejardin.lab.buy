@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dragondejardin.lab — Tienda</title>
+  <meta name="description" content="Productos seleccionados por dragondejardin.lab">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #080807;
+      --surface:  #0F0F0D;
+      --border:   #232116;
+      --gold:     #BFA060;
+      --gold-dim: #6B5925;
+      --text:     #E4DDD0;
+      --muted:    #5C5748;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1rem 5rem;
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      padding: 3.5rem 0 0;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.45em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .brand {
+      font-family: 'Playfair Display SC', serif;
+      font-size: clamp(2.2rem, 9vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text);
+      animation: flicker 9s ease-in-out infinite;
+    }
+
+    @keyframes flicker {
+      0%,100%      { opacity: 1;    }
+      49%          { opacity: 1;    }
+      50%          { opacity: 0.88; }
+      51%          { opacity: 1;    }
+      84%          { opacity: 1;    }
+      85%          { opacity: 0.93; }
+      86%          { opacity: 1;    }
+    }
+
+    .sub {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── ORNAMENT DIVIDER ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 1.8rem auto 1.4rem;
+      max-width: 280px;
+      width: 100%;
+    }
+    .ornament-line {
+      flex: 1;
+      height: 1px;
+    }
+    .ornament-line.l { background: linear-gradient(to right, transparent, var(--gold-dim)); }
+    .ornament-line.r { background: linear-gradient(to left,  transparent, var(--gold-dim)); }
+    .ornament-glyph {
+      font-size: 0.85rem;
+      color: var(--gold);
+      opacity: 0.65;
+      flex-shrink: 0;
+    }
+
+    /* ── SOCIAL LINKS ── */
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 0.25rem;
+    }
+    .social {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .social:hover { color: var(--gold); }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.45em;
+      color: var(--muted);
+      text-transform: uppercase;
+      text-align: center;
+      margin: 2.8rem 0 1.4rem;
+    }
+
+    /* ── PRODUCT GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.875rem;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    /* Corner-bracket reveal on hover */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.45s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card::before,
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0;
+      transition: opacity 0.45s;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .card::before { top: 6px;    left: 6px;  border-width: 1px 0 0 1px; }
+    .card::after  { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+    .card:hover                 { border-color: var(--gold-dim); }
+    .card:hover::before,
+    .card:hover::after          { opacity: 1; }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.8) brightness(0.95);
+      transition: filter 0.45s;
+    }
+    .card:hover .card-img {
+      filter: saturate(1) brightness(1);
+    }
+
+    .card-body {
+      padding: 0.7rem 0.75rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      flex: 1;
+    }
+
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .card-btn {
+      margin-top: 0.65rem;
+      padding-top: 0.65rem;
+      display: block;
+      text-align: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .card:hover .card-btn {
+      color: var(--gold);
+      border-color: var(--gold-dim);
+    }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      max-width: 360px;
+      width: 100%;
+      margin: 0 auto 0.5rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      padding: 0.65rem 1rem;
+      letter-spacing: 0.02em;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-input::placeholder {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .search-input:focus {
+      border-color: var(--gold-dim);
+    }
+
+    .no-results {
+      text-align: center;
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 2rem 0;
+      width: 100%;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 4.5rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-align: center;
+      opacity: 0.4;
+      text-transform: uppercase;
+    }
+
+    /* single column on very small screens */
+    @media (max-width: 340px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand { animation: none; }
+      .card, .card-img, .card-btn,
+      .card::before, .card::after,
+      .social { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">UN POCO DE </p>
+  <h1 class="brand">dragondejardin.lab</h1>
+  <p class="sub"></p>
+
+  <div class="ornament">
+    <div class="ornament-line l"></div>
+    <span class="ornament-glyph">✦</span>
+    <div class="ornament-line r"></div>
+  </div>
+
+  <nav class="socials">
+    <a class="social" href="https://www.tiktok.com/@dragondejardin.lab" target="_blank" rel="noopener">TikTok</a>
+    <a class="social" href="https://www.instagram.com/dragondejardin.lab" target="_blank" rel="noopener">Instagram</a>
+  </nav>
+</header>
+
+<p class="section-label">productos seleccionados</p>
+
+<div class="search-wrap">
+  <input type="text" class="search-input" id="buscador" placeholder="Buscar producto...">
+</div>
+
+<div class="grid" id="grid"></div>
+<p class="no-results" id="noResults" style="display:none;">No se encontraron productos ✦</p>
+
+<footer>dragondejardin.lab &copy; 2026</footer>
+
+<script>
+  // ══════════════════════════════════════════════════════════
+  //  ✏️  PARA AGREGAR UN PRODUCTO NUEVO:
+  //  Copia un bloque { ... }, cambia "nombre", "link" e "imagen".
+  //  Si no tienes la foto todavía, quita la línea "imagen" o
+  //  déjala vacía ("") y se usará el genérico de SHEIN.
+  //
+  //  Las fotos van en la carpeta "img/" junto a este archivo,
+  //  ej: img/cinturon-gotico.jpg
+  // ══════════════════════════════════════════════════════════
+  const productos = [
+    {
+      nombre: "Cinturón de cadena gótico/punk para mujer",
+      link:   "https://onelink.shein.com/39/5tfw8tn1zklg",
+      imagen: "img/ARNES.jpg"
+    },
+    {
+      nombre: "Mono de manga larga con parches de encaje (talla grande)",
+      link:   "https://onelink.shein.com/39/5tfwfq8y7w2f",
+      imagen: "img/MONO NEGRO.jpg"
+    },
+    {
+      nombre: "Billetera con forma de murciélago (cuero sintético)",
+      link:   "https://onelink.shein.com/39/5tfwi148vdwq",
+      imagen: "img/BILLETERA DE MURCIELAGO.png"
+    },
+    {
+      nombre: "Barra solar Tocob SPF50+ PA+++ vegana coreana",
+      link:   "https://onelink.shein.com/39/5tfwiuppk7ib",
+      imagen: "img/TOCOBO.jpg"
+    },
+    {
+      nombre: "Bolso bandolera retro con tachuelas y borlas",
+      link:   "https://onelink.shein.com/39/5tfwklup5yqm",
+      imagen: "img/BOLSO GOTICO.jpg"
+    },
+    {
+      nombre: "Botones para acortar prendas (2 piezas)",
+      link:   "https://onelink.shein.com/39/5tfwmqswk3rb",
+      imagen: "img/BOTONES DE CINTURA.jpg"
+    },
+    {
+      nombre: "Gorrito gótico",
+      link:   "https://onelink.shein.com/39/5tj6z2bbx8ht",
+      imagen: "img/GORRO GOTICO..jpg"
+    },
+    {
+      nombre: "Conjunto blusa + falda mini estampado leopardo (talla grande)",
+      link:   "https://onelink.shein.com/39/5tfx3kje722y",
+      imagen: "img/CONSUJO DE FALDA LEOPARDO.jpg"
+    },
+    
+    {
+      nombre: "Vestido mini plisado estampado hoja de arce vintage",
+      link:   "https://onelink.shein.com/39/5tfx6qz6q8lq",
+      imagen: "img/CONJUNTO DE LEOPARDO PLAYA.jpg"
+    },
+    {
+      nombre: "Funda de teléfono 3D con mariposa y correa (iPhone)",
+      link:   "https://onelink.shein.com/39/5tfxaszh303b",
+      imagen: "img/FUNDA DE CEL MARIPOSA.jpg"
+    },
+    {
+      nombre: "Suéter ROMWE cuello alto, mangas farol, estampado",
+      link:   "https://onelink.shein.com/39/5tfxcs0l2612",
+      imagen: "img/SUDADERA.jpg"
+    },
+    {
+      nombre: "Skyraze Vestido de verano de cami con pliegues de ante marrón, festival de música",
+      link:   "https://onelink.shein.com/39/5tj7fg9kog7n",
+      imagen: "img/VESTIDITO DE VERANO.jpg"
+    },
+  ];
+  // ══════════════════════════════════════════════════════════
+
+  // Imagen genérica única para todos los productos (no se necesitan fotos)
+  const IMAGEN_GENERICA = "https://placehold.co/400x400/0F0F0D/BFA060?text=SHEIN";
+
+  const grid       = document.getElementById('grid');
+  const noResults  = document.getElementById('noResults');
+  const buscador   = document.getElementById('buscador');
+
+  function renderProductos(lista) {
+    grid.innerHTML = '';
+
+    if (lista.length === 0) {
+      noResults.style.display = 'block';
+      return;
+    }
+    noResults.style.display = 'none';
+
+    lista.forEach(p => {
+      const card = document.createElement('a');
+      card.className = 'card';
+      card.href      = p.link;
+      card.target    = '_blank';
+      card.rel       = 'noopener';
+      const fotoFinal = (p.imagen && p.imagen.trim() !== '') ? p.imagen : IMAGEN_GENERICA;
+      card.innerHTML = `
+        <img class="card-img" src="${fotoFinal}" alt="${p.nombre}" loading="lazy" onerror="this.src='${IMAGEN_GENERICA}'">
+        <div class="card-body">
+          <p class="card-name">${p.nombre}</p>
+          <span class="card-btn">Ver producto</span>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  buscador.addEventListener('input', () => {
+    const termino = buscador.value.trim().toLowerCase();
+    const filtrados = productos.filter(p =>
+      p.nombre.toLowerCase().includes(termino)
+    );
+    renderProductos(filtrados);
+  });
+
+  renderProductos(productos);
+</script>
+
+</body>
+</html>
